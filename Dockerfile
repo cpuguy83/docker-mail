@@ -1,6 +1,7 @@
 FROM ubuntu:12.04
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -qq && apt-get install -y postfix dovecot-imapd runit -qq
+RUN rm -rf /etc/sv/getty-5
 
 RUN echo "protocols = imap" >> /etc/dovecot/dovecot.conf
 
