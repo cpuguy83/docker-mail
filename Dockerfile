@@ -17,11 +17,9 @@ ADD postfix_finish /etc/sv/postfix/finish
 ADD dovecot_run /etc/sv/dovecot/run
 RUN chmod 0755 /home
 
-VOLUME /etc/postfix
-VOLUME /var/mail
-VOLUME /var/spool/mail
-VOLUME /etc/dovecot
-VOLUME /home
+RUN useradd vmail -g mail -s /sbin/nologin -d /var/vmail
+
+VOLUME ["/etc/postfix", "/var/mail", "/var/spool/mail", "/etc/dovecot"]
 
 EXPOSE 25/tcp 143/tcp 993/tcp
 ENTRYPOINT ["/usr/bin/runsvdir", "/etc/sv"]
