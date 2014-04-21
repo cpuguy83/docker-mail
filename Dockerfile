@@ -4,9 +4,7 @@ RUN apt-get update -qq && apt-get install -y postfix dovecot-imapd dovecot-ldap 
 RUN rm -rf /etc/sv/getty-5
 
 RUN echo "protocols = imap" >> /etc/dovecot/dovecot.conf
-
-ADD submission.cf /tmp/
-RUN cat /tmp/submission.cf >> /etc/master.cf
+RUN echo -e "smtpd_sasl_auth_enable = yes\nsmtpd_sasl_type = dovecot\nsmtpd_sasl_path = private/auth\nsmtpd_relay_restrictionsi = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination" >> /etc/postfix/main.cf
 
 ADD 10-postfix-listener.conf /etc/dovecot/conf.d/
 
@@ -17,7 +15,7 @@ ADD postfix_finish /etc/sv/postfix/finish
 ADD dovecot_run /etc/sv/dovecot/run
 RUN chmod 0755 /home
 
-RUN useradd vmail -g mail -s /sbin/nologin -d /var/vmail
+RUN useradd vmail -g mail -s /sbin/nologin -d /var/mail && chmod 0777 /var
 
 VOLUME ["/etc/postfix", "/var/mail", "/var/spool/mail", "/etc/dovecot"]
 
