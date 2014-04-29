@@ -1,3 +1,4 @@
 #!/bin/bash
+sed -i "s/myhostname =.*/myhostname = `hostname`/" /etc/postfix/main.cf
 
 exec /usr/lib/postfix/master -d -c /etc/postfix
